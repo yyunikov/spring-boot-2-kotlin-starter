@@ -9,6 +9,7 @@ Contains:
 - Tests configuration with MongoDb
 - Logging configuration
 - Gradle profiles configuration
+- Docker compose
 
 Feel free to use for your own projects.
 
