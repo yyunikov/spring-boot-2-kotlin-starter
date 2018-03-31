@@ -1,5 +1,6 @@
 target/
 deploy/
+build/
 
 ### Mac ###
 .DS_Store
