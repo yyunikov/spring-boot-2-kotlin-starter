@@ -1,0 +1,94 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion" // Required for Kotlin integration
+        classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion" // See https://kotlinlang.org/docs/reference/compiler-plugins.html#kotlin-spring-compiler-plugin
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.4.RELEASE"
+    }
+}
+
+group 'com.yunikov'
+
+allprojects { // parent + all other projects
+    repositories {
+        mavenCentral()
+        maven { url "https://repo.spring.io/snapshot" }
+        maven { url "https://repo.spring.io/milestone" }
+        maven { url "https://repo.spring.io/libs-release" }
+    }
+
+    group = 'com.yunikov'
+    version = "$appVersion"
+}
+
+subprojects { // all projects except of parent
+    apply plugin: 'java'
+    apply plugin: 'kotlin' // Required for Kotlin integration
+    apply plugin: "kotlin-spring" // See https://kotlinlang.org/docs/reference/compiler-plugins.html#kotlin-spring-compiler-plugin
+    apply plugin: 'io.spring.dependency-management'
+
+    compileKotlin {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
+    }
+
+    compileTestKotlin {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
+    }
+
+    dependencies {
+        compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion" // Required for Kotlin integration
+        compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion" // Required for Kotlin integration
+
+        compile group: 'com.fasterxml.jackson.module', name: 'jackson-module-kotlin', version: '2.9.4.1'
+
+        testCompile group: 'junit', name: 'junit'
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
+            mavenBom("org.springframework.boot:spring-boot-starter-parent:$springBootVersion")
+        }
+
+        dependencies {
+            dependency 'com.github.mongobee:mongobee:0.13'
+            dependency 'org.javassist:javassist:3.18.2-GA' // workaround for ${javassist.version} placeholder issue*
+
+            dependency group: 'cz.jirutka.spring', name: 'embedmongo-spring', version: '1.3.1'
+            dependency group: 'junit', name: 'junit', version: '4.12'
+            dependency group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
+            dependency group: 'org.apache.commons', name: 'commons-io', version: '1.3.2'
+            dependency group: 'com.fasterxml.jackson.module', name: 'jackson-module-kotlin', version: '2.9.4.1'
+            dependency group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '2.0.3'
+            dependency group: 'org.json', name: 'json', version: '20171018'
+        }
+    }
+
+    configurations {
+        testArtifacts
+    }
+
+    task testJar (type: Jar) {
+        baseName = "${project.name}-test"
+        from sourceSets.test.output
+    }
+
+    artifacts {
+        testArtifacts testJar
+    }
+
+    task allDeps(type: DependencyReportTask) {}
+}

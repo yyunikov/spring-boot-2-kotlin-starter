@@ -1,0 +1,4 @@
+rootProject.name = 'parent'
+include 'api'
+include 'domain'
+

@@ -1,0 +1,6 @@
+ext {
+    // profile specific properties
+}
+dependencies {
+    // profile specific dependencies
+}

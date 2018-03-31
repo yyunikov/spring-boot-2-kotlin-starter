@@ -1,0 +1,26 @@
+description = 'api'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // db migrations
+    compile 'org.javassist:javassist' // workaround for ${javassist.version} placeholder issue*
+    compile 'com.github.mongobee:mongobee'
+
+    // https://mvnrepository.com/artifact/io.projectreactor/reactor-core
+    compile group: 'io.projectreactor', name: 'reactor-core'
+
+    compile group: 'ch.qos.logback', name: 'logback-classic'
+    compile group: 'org.json', name: 'json'
+    compile group: 'org.apache.commons', name: 'commons-io'
+
+    // apache
+    compile group: 'org.apache.commons', name: 'commons-lang3'
+
+    testCompile group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo'
+    testCompile group: 'cz.jirutka.spring', name: 'embedmongo-spring'
+    testCompile group: 'org.springframework', name: 'spring-test'
+}

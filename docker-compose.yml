@@ -1,0 +1,27 @@
+version: "3.4"
+
+services:
+  api:
+    image: api/latest
+    container_name: "api"
+    command: -m 512m
+    build:
+      context: ./api
+    volumes:
+      - ~/.aws:/root/.aws
+      - ./logs:/var/log
+    environment:
+      - AWS_DEFAULT_PROFILE
+      - AWS_PROFILE
+      - AWS_DEFAULT_REGION
+      - AWS_REGION
+    ports:
+      - 8080:8080
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:3.6.1
+    container_name: "mongodb"
+    ports:
+      - 27017:27017

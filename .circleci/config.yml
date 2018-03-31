@@ -1,0 +1,68 @@
+job-defaults: &job-defaults
+  working_directory: &working_directory
+    ~/spring-boot-kotlin-starter
+
+restore-gradle-cache: &restore-gradle-cache
+  restore_cache:
+    keys:
+    - v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "api/build.gradle" }}-{{ checksum "domain/build.gradle" }}-{{ checksum "gradle.properties" }}
+    # fallback to using the latest cache if no exact match is found
+    - v1-dependencies-
+
+save-gradle-cache: &save-gradle-cache
+  save_cache:
+    paths:
+      - ~/.gradle
+    key: v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "api/build.gradle" }}-{{ checksum "domain/build.gradle" }}-{{ checksum  "gradle.properties" }}
+
+version: 2
+jobs:
+  build-test:
+    docker:
+      - image: circleci/openjdk:8-jdk
+
+    <<: *job-defaults
+
+    steps:
+      - checkout
+
+      # download and cache dependencies
+      - <<: *restore-gradle-cache
+      - run: gradle compileTestKotlin
+      - <<: *save-gradle-cache
+
+      - run: gradle test
+      - persist_to_workspace:
+          root: .
+          paths: "*"
+
+  deploy-dev:
+    machine:
+      enabled: true
+      image: circleci/classic:201710-02
+
+    <<: *job-defaults
+
+    steps:
+      - attach_workspace:
+          at: *working_directory
+      # building in order to create a jar file
+      # https://support.circleci.com/hc/en-us/articles/115015516048-Gradle-TERM-not-set
+      - <<: *restore-gradle-cache
+      - run: export TERM=${TERM:-dumb} && ./gradlew build -x test
+      - run:
+         name: Deploy dev
+         command: |
+          echo Deployment...
+
+workflows:
+  version: 2
+  build-test-deploy:
+    jobs:
+      - build-test
+      - deploy-dev:
+          requires:
+            - build-test
+          filters:
+            branches:
+              only: master

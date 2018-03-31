@@ -1,0 +1,47 @@
+buildscript {
+    repositories {
+        maven { url "https://plugins.gradle.org/m2/" }
+        maven { url "https://repo.spring.io/milestone" }
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+    }
+}
+
+plugins {
+    id "com.gorylenko.gradle-git-properties" version "1.4.17"
+}
+
+apply plugin: "org.springframework.boot"
+
+description = 'api'
+version = "$appVersion"
+
+bootJar {
+    archiveName = 'api.jar'
+}
+
+bootRun {
+    //noinspection GroovyAssignabilityCheck
+    systemProperties = System.properties
+}
+
+springBoot {
+    buildInfo()
+}
+
+dependencies {
+    compile project(":domain")
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
+    compile group: 'com.fasterxml.jackson.module', name: 'jackson-module-kotlin'
+    // compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: "${springBootVersion}"
+    // compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: "2.2.1.RELEASE"
+
+    testCompile project (path: ":domain", configuration: 'testArtifacts')
+    testCompile group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo'
+    testCompile group: 'cz.jirutka.spring', name: 'embedmongo-spring'
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+}
+
+apply from: rootProject.file('gradle/profiles.gradle')

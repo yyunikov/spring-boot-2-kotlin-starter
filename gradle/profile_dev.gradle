@@ -1,0 +1,6 @@
+ext {
+    // profile specific properties
+}
+dependencies {
+    compile("org.springframework.boot:spring-boot-devtools") // live-reload and other dev features
+}
