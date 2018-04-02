@@ -7,6 +7,7 @@ Contains:
 - Spring Boot 2.0 setup
 - CircleCI 2.0 basic setup
 - Tests configuration with MongoDb
+- JUnit 5 test examples
 - Logging configuration
 - Gradle profiles configuration
 - Docker compose

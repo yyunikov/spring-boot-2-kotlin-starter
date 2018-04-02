@@ -1,24 +1,27 @@
 package com.yunikov.api
 
-import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.context.TestPropertySource
-import org.springframework.test.context.junit4.SpringRunner
+import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.reactive.server.WebTestClient
 
-@RunWith(SpringRunner::class)
+@ExtendWith(SpringExtension::class)
 @SpringBootTest(classes = [TestApiApplication::class])
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 @AutoConfigureWebTestClient
+@DisplayName("Actuator endpoints")
 class ActuatorEndpointsIntegrationTest {
 
     @Autowired
     private lateinit var client: WebTestClient
 
+    @DisplayName("Should return status on /health")
     @Test
     fun healthEndpointWorks() {
         client.get().uri("/app/health")
@@ -28,6 +31,7 @@ class ActuatorEndpointsIntegrationTest {
                 .expectBody().json("{\"status\": \"UP\"}")
     }
 
+    @DisplayName("Should return build and git info on /info")
     @Test
     fun infoEndpointWorks() {
         client.get().uri("/app/info")
@@ -45,6 +49,7 @@ class ActuatorEndpointsIntegrationTest {
                 .isNotEmpty
     }
 
+    @DisplayName("Should return metrics on /metrics")
     @Test
     fun metricsEndpointWorks() {
         client.get().uri("/app/metrics")
@@ -59,6 +64,7 @@ class ActuatorEndpointsIntegrationTest {
                 .isNotEmpty
     }
 
+    @DisplayName("Should return links on /app")
     @Test
     fun actuatorRootReturnsOnlyAllowed() {
         client.get().uri("/app")

@@ -1,24 +1,20 @@
 package com.yunikov.api.errors
 
-import com.yunikov.api.errors.ErrorHandler
-import com.yunikov.api.errors.ErrorResponse
 import com.yunikov.api.errors.exceptions.ResourceNotFoundException
-import org.junit.Assert.assertEquals
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import org.springframework.http.HttpStatus
 import org.springframework.web.reactive.function.server.EntityResponse
 import reactor.core.publisher.Mono
 
+@DisplayName("Error handler")
 class ErrorHandlerTest {
 
-    private lateinit var errorHandler: ErrorHandler
+    private val errorHandler: ErrorHandler = ErrorHandler()
 
-    @Before
-    fun setUp() {
-        errorHandler = ErrorHandler()
-    }
-
+    @DisplayName("Should handle not found error")
     @Test
     fun notFoundIsHandled() {
         assertErrorIsHandled(ResourceNotFoundException(""),
@@ -27,6 +23,7 @@ class ErrorHandlerTest {
                 HttpStatus.NOT_FOUND.reasonPhrase)
     }
 
+    @DisplayName("Should handle internal server error")
     @Test
     fun internalErrorIsHandled() {
         assertErrorIsHandled(IllegalStateException(),
@@ -46,8 +43,10 @@ class ErrorHandlerTest {
                     assertEquals(expectedHttpStatus, response.statusCode())
 
                     entityResponse.entity().subscribe({ errorResponse ->
-                        assertEquals(expectedCode, errorResponse.code)
-                        assertEquals(expectedMessage, errorResponse.message)
+                        assertAll({
+                            assertEquals(expectedCode, errorResponse.code)
+                            assertEquals(expectedMessage, errorResponse.message)
+                        })
                     })
                 })
     }
