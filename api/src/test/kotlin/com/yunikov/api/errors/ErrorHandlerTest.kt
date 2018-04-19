@@ -36,7 +36,7 @@ class ErrorHandlerTest {
                                      expectedHttpStatus: HttpStatus,
                                      expectedCode:Int,
                                      expectedMessage:String) {
-        errorHandler.handle(throwable)
+        errorHandler.handleAndRespond(throwable)
                 .subscribe({ response ->
                     @Suppress("UNCHECKED_CAST")
                     val entityResponse = response as EntityResponse<Mono<ErrorResponse>>
