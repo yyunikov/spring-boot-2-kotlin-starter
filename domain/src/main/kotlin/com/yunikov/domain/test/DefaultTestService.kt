@@ -7,7 +7,7 @@ import reactor.core.publisher.Mono.just
 @Service
 class DefaultTestService: TestService {
 
-    override fun test(): Mono<String> {
-        return just("Test")
+    override fun test(message: String): Mono<String> {
+        return just(message)
     }
 }
