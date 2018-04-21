@@ -14,18 +14,16 @@ class ErrorHandlerTest {
 
     private val errorHandler: ErrorHandler = ErrorHandler()
 
-    @DisplayName("Should handle not found error")
     @Test
-    fun notFoundIsHandled() {
+    fun `Should handle not found error`() {
         assertErrorIsHandled(ResourceNotFoundException(""),
                 HttpStatus.NOT_FOUND,
                 ErrorHandler.NOT_FOUND_CODE,
                 HttpStatus.NOT_FOUND.reasonPhrase)
     }
 
-    @DisplayName("Should handle internal server error")
     @Test
-    fun internalErrorIsHandled() {
+    fun `Should handle internal server error`() {
         assertErrorIsHandled(IllegalStateException(),
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 ErrorHandler.INTERNAL_ERROR_CODE,

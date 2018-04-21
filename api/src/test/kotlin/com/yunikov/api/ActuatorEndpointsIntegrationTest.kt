@@ -7,13 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
-import org.springframework.test.context.TestPropertySource
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.reactive.server.WebTestClient
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(classes = [TestApiApplication::class])
-@TestPropertySource(locations = ["classpath:application-test.properties"])
+@ActiveProfiles("test")
 @AutoConfigureWebTestClient
 @DisplayName("Actuator endpoints")
 class ActuatorEndpointsIntegrationTest {
@@ -21,9 +21,8 @@ class ActuatorEndpointsIntegrationTest {
     @Autowired
     private lateinit var client: WebTestClient
 
-    @DisplayName("Should return status on /health")
     @Test
-    fun healthEndpointWorks() {
+    fun `Should return status on health`() {
         client.get().uri("/app/health")
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .exchange()
