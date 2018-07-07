@@ -10,7 +10,7 @@ services:
     volumes:
       - ./logs:/var/log
     environment:
-      - SPRING_DATA_MONGODB_URI=mongodb://mongodb/tt
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb/spring-boot-2-kotlin-starter
     ports:
       - 8080:8080
     depends_on:

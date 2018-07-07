@@ -19,7 +19,8 @@ version: 2
 jobs:
   build-test:
     docker:
-      - image: circleci/openjdk:8-jdk
+      - image: yyunikov/circleci-java-mongodb
+      - image: circleci/mongo:3.6
 
     <<: *job-defaults
 
@@ -28,10 +29,13 @@ jobs:
 
       # download and cache dependencies
       - <<: *restore-gradle-cache
-      - run: gradle compileTestKotlin
+      - run: ./gradlew compileTestKotlin
       - <<: *save-gradle-cache
 
-      - run: gradle test
+      - run:
+         name: Run Tests
+         command: ./gradlew clean test
+
       - persist_to_workspace:
           root: .
           paths: "*"

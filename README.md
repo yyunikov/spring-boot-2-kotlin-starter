@@ -20,6 +20,11 @@ Feel free to use for your own projects.
 ## To run the tests
 `./gradlew test`
 
+## Example call
+```
+curl http://localhost:8080/test?token=eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJhNjQyMjk0NC01ZDFkLTQxODItOGE2ZS1mZGM0NjEwYzhlNTYiLCJzdWIiOiJleGFtcGxlIiwiaWF0IjoxNTIzNzQyNzcxLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvIiwiZW1haWwiOiJleGFtcGxlQHl1bmlrb3YuY29tIiwicm9sZXMiOlsidXNlciJdfQ.L9eQqG8ggxbZDLxDFAbGND7uIv4DzF7LjSfvi0iq6HT3NshzKed89VQwRU-r_hcd9Tl6644lQCZcilllg2WS0A
+```
+
 ## Contribution guidelines ###
 
 * Submit pull requests for any changes on the repository. Assign @yyunikov for review.

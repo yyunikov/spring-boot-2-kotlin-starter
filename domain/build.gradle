@@ -20,7 +20,14 @@ dependencies {
     // apache
     compile group: 'org.apache.commons', name: 'commons-lang3'
 
+    // mongo
+    compile group: 'org.mongodb', name: 'mongodb-driver-reactivestreams'
+
+    // spring
+    compile group: 'org.springframework.data', name: 'spring-data-mongodb'
+
     testCompile group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo'
     testCompile group: 'cz.jirutka.spring', name: 'embedmongo-spring'
     testCompile group: 'org.springframework', name: 'spring-test'
+    testCompile group: 'io.projectreactor', name: 'reactor-test'
 }
